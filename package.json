@@ -7,29 +7,62 @@
     "type": "git",
     "url": "https://github.com/jonestremblay/FoldAllSQLDebug-VSCode.git"
   },
-  "version": "0.0.1",
+  "version": "1.0.0",
   "engines": {
     "vscode": "^1.102.0"
   },
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:sql"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "extension.FoldAllSQLDebug",
-        "title": "Fold All SQL Debug"
+        "command": "extension.foldallsqldebug",
+        "title": "Fold All SQL Debug Sections"
+      },
+      {
+        "command": "extension.unfoldallsqldebug",
+        "title": "Unfold All SQL Debug Sections"
       }
     ],
     "menus": {
       "editor/context": [
         {
-          "command": "extension.FoldAllSQLDebug",
+          "command": "extension.foldallsqldebug",
+          "when": "editorLangId == sql"
+        },
+        {
+          "command": "extension.unfoldallsqldebug",
           "when": "editorLangId == sql"
         }
       ]
+    },
+    "configuration": {
+      "type": "object",
+      "title": "FoldAllSQLDebug",
+      "properties": {
+        "foldAllSQLDebug.ranges": {
+          "type": "array",
+          "description": "Liste des paires de marqueurs de début et de fin pour les régions repliables.",
+          "default": [
+            { "start": "-- section DEBUG_START", "end": "-- section DEBUG_END" },
+            { "start": "/* section DEBUG_START */", "end": "/* section DEBUG_END */" },
+            { "start": "-- region DEBUG_START", "end": "-- region DEBUG_END" },
+            { "start": "/* region DEBUG_START */", "end": "/* region DEBUG_END */" }
+          ],
+          "items": {
+            "type": "object",
+            "properties": {
+              "start": { "type": "string" },
+              "end": { "type": "string" }
+            }
+          }
+        }
+      }
     }
   },
   "scripts": {
